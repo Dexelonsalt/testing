@@ -7,6 +7,13 @@ bot.on("ready", () => {
 });
 let Prefix = "=";
 
+function clean(text) {
+    if (typeof(text) === "string")
+      return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
+    else
+        return text;
+}
+
 bot.on("messageCreate", (msg) => {
     try {
     if (msg.author.bot) return;
@@ -27,8 +34,19 @@ bot.on("messageCreate", (msg) => {
         case "msgcount":
         let user2 = msg.mentions[0]
         if (!user2) return bot.createMessage(msg.channel.id, "Please mention a user!")
-        bot.createMessage(msg.channel.id, `${bot.users[user2.id].messageCount} messages found!`)
+        bot.createMessage(msg.channel.id, `${bot.users.get(user2.id).messageCount} messages found!`)
         break;
+        case "eval":
+        if (msg.author.id !== "222794789567987712") return bot.createMessage(msg.channel.id, "Only TheGreenCat can access this command!").catch(console.error);
+        try {
+            let code = eval(msg.content.slice(6));
+            if (typeof code !== "string") {code = require("util").inspect(code);}
+            let dacodeo = args.slice(1).join(" ")
+            bot.createMessage(msg.channel.id, "``" + code + "``")
+        } catch (err) {
+            bot.createMessage(msg.channel.id, `\`\`\n${clean(err)}\n\`\``)
+        }
+    break;
     }
 } catch(e) {
     bot.createMessage(msg.channel.id, `${e}`)
