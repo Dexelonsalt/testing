@@ -1,0 +1,37 @@
+
+const Eris = require("eris")
+const fs = require("fs")
+
+bot.on("ready", () => {
+    console.log("I am ready. NOW LEAVE ME ALONE!!! jk jk")
+});
+let Prefix = "=";
+
+bot.on("messageCreate", (msg) => {
+    try {
+    if (msg.author.bot) return;
+    if (!msg.content.startsWith(Prefix)) return;
+    let args = msg.content.slice(Prefix.length).trim().split(/ +/g);
+    switch (args[0]) {
+    case "ping":
+        bot.createMessage(msg.channel.id, `Pong!`);
+        break;
+        case "id":
+        let user = msg.mentions[0]
+        if (!user) {
+            bot.createMessage(msg.channel.id, `Please mention a user!`)
+            return;
+        }
+        bot.createMessage(msg.channel.id, `The ID is \`${user.id}\``)
+        break;
+        case "msgcount":
+        let user2 = msg.mentions[0]
+        if (!user2) return bot.createMessage(msg.channel.id, "Please mention a user!")
+        bot.createMessage(msg.channel.id, `${bot.users[user2.id].messageCount} messages found!`)
+        break;
+    }
+} catch(e) {
+    bot.createMessage(msg.channel.id, `${e}`)
+}
+});
+bot.connect();
