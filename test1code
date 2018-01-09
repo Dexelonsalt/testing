@@ -21,7 +21,7 @@ bot.on("messageCreate", (msg) => {
     let args = msg.content.slice(Prefix.length).trim().split(/ +/g);
     switch (args[0]) {
     case "ping":
-        bot.createMessage(msg.channel.id, `Pong!`);
+        bot.createMessage(msg.channel.id, `Pong! ok`);
         break;
         case "id":
         let user = msg.mentions[0]
